@@ -7,6 +7,10 @@ const SearchBar = ({ onSearch }) => {
     const handleSearch = () => {
       onSearch(query);
     };
+
+    const handleQueryChange = (e) => {
+      setQuery(e.target.value);
+    };
   
     return (
       <div className="SearchBar">
@@ -14,7 +18,7 @@ const SearchBar = ({ onSearch }) => {
           type="text"
           placeholder="Enter a song, album, or artist"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={handleQueryChange}
         />
         <button onClick={handleSearch}>SEARCH</button>
       </div>
