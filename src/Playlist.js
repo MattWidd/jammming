@@ -5,7 +5,8 @@ import './PlayList.css';
 const Playlist = ({ playlistName, playlistTracks, onRemove, onNameChange, onSave }) => {
     const handleNameChange = (e) => onNameChange(e.target.value);
   
-    return (
+    return (<>
+      {playlistTracks.length > 0 && (
       <div className="Playlist">
         <input 
           type="text"
@@ -19,6 +20,8 @@ const Playlist = ({ playlistName, playlistTracks, onRemove, onNameChange, onSave
         />
         <button className="Playlist-save" onClick={onSave}>SAVE TO SPOTIFY</button>
       </div>
+      )}
+      </>
     );
   };
   

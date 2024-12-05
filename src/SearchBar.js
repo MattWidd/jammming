@@ -8,6 +8,12 @@ const SearchBar = ({ onSearch }) => {
       onSearch(query);
     };
 
+    const handleKeyDown = (event) => {
+      if (event.key === 'Enter') {
+        onSearch(query); // Trigger the search function
+      }
+    };
+
     const handleQueryChange = (e) => {
       setQuery(e.target.value);
     };
@@ -19,6 +25,7 @@ const SearchBar = ({ onSearch }) => {
           placeholder="Enter a song, album, or artist"
           value={query}
           onChange={handleQueryChange}
+          onKeyDown={handleKeyDown}
         />
         <button onClick={handleSearch}>SEARCH</button>
       </div>
