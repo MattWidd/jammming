@@ -5,14 +5,8 @@ import SearchResults from './SearchResults';
 import Playlist from './Playlist';
 import Spotify from './Spotify';
 
-const mockTracks = [
-  { id: 1, name: 'Track 1', artist: 'Artist 1', album: 'Album 1', uri: 'spotify:track:1' },
-  { id: 2, name: 'Track 2', artist: 'Artist 2', album: 'Album 2', uri: 'spotify:track:2' },
-  { id: 3, name: 'Track 3', artist: 'Artist 3', album: 'Album 3', uri: 'spotify:track:3' },
-];
-
 const App = () => {
-  const [searchResults, setSearchResults] = useState(mockTracks);
+  const [searchResults, setSearchResults] = useState([]);
   const [playlistTracks, setPlaylistTracks] = useState([]);
   const [playlistName, setPlaylistName] = useState('My Playlist');
 
@@ -36,7 +30,7 @@ const App = () => {
   const savePlaylist = () => {
     // Extract URIs from playlistTracks
     const trackURIs = playlistTracks.map(track => track.uri);
-
+    Spotify.savePlaylist(playlistName, trackURIs).then(() => {
     console.log('Saving playlist...');
     console.log(`Name: ${playlistName}`);
     console.log(`Tracks: ${trackURIs}`);
@@ -44,6 +38,7 @@ const App = () => {
     // Simulate saving the playlist to Spotify (mocked for now)
     setPlaylistName('My Playlist'); // Reset playlist name
     setPlaylistTracks([]);         // Clear the playlist
+   })
   };
 
   return (

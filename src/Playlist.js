@@ -17,7 +17,7 @@ const Playlist = ({ playlistName, playlistTracks, onRemove, onNameChange, onSave
           onRemove={onRemove} 
           isRemoval={true} 
         />
-        <button onClick={onSave}>SAVE TO SPOTIFY</button>
+        <button className="Playlist-save" onClick={onSave}>SAVE TO SPOTIFY</button>
       </div>
     );
   };
