@@ -18,10 +18,11 @@ const App = () => {
     { id: 3, name: 'Shape of You', artist: 'Ed Sheeran', album: '÷ (Divide)', uri: 'mock:uri3' },
     // Add more tracks as needed
   ];
-  
   const searchSpotify = (term) => {
-    Spotify.search(term).then(tracks => {
-      if (tracks.length > 0) {
+    Spotify.search(term)
+      .then(tracks => {
+      setSearchResults(tracks);
+      if (tracks.length > 0 ) {
         setIsSearchActive(true);
         // If Spotify returns results, use them
         setSearchResults(tracks);
@@ -45,28 +46,28 @@ const App = () => {
   
 
   const addTrack = (track) => {
-    if (playlistTracks.find(savedTrack => savedTrack.id === track.id)) return;
-    setPlaylistTracks([...playlistTracks, track]);
+    if (!playlistTracks.find(savedTrack => savedTrack.id === track.id)) {
+      setPlaylistTracks(prevTracks => [...prevTracks, track]);
+    }
   };
 
   const removeTrack = (track) => {
-    setPlaylistTracks(playlistTracks.filter(savedTrack => savedTrack.id !== track.id));
+    setPlaylistTracks(prevTracks => prevTracks.filter(savedTrack => savedTrack.id !== track.id));
   };
 
-  const updatePlaylistName = (name) => setPlaylistName(name);
+  const updatePlaylistName = (name) => {
+    setPlaylistName(name);
+  };
 
   const savePlaylist = () => {
-    // Extract URIs from playlistTracks
     const trackURIs = playlistTracks.map(track => track.uri);
     Spotify.savePlaylist(playlistName, trackURIs).then(() => {
-    console.log('Saving playlist...');
-    console.log(`Name: ${playlistName}`);
-    console.log(`Tracks: ${trackURIs}`);
-
-    // Simulate saving the playlist to Spotify (mocked for now)
-    setPlaylistName('My Playlist'); // Reset playlist name
-    setPlaylistTracks([]);         // Clear the playlist
-   })
+      console.log('Saving playlist...');
+      console.log(`Name: ${playlistName}`);
+      console.log(`Tracks: ${trackURIs}`);
+      setPlaylistName('My Playlist'); // Reset playlist name
+      setPlaylistTracks([]);         // Clear the playlist
+    });
   };
 
   return (
