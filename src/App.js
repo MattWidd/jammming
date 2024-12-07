@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect  } from 'react';
 import './App.css';
 import Fuse from 'fuse.js';
 import SearchBar from './SearchBar';
@@ -18,32 +18,52 @@ const App = () => {
     { id: 3, name: 'Shape of You', artist: 'Ed Sheeran', album: '÷ (Divide)', uri: 'mock:uri3' },
     // Add more tracks as needed
   ];
+  
   const searchSpotify = (term) => {
+    console.log(`Search term: ${term}`);
+  
     Spotify.search(term)
-      .then(tracks => {
-      setSearchResults(tracks);
-      if (tracks.length > 0 ) {
-        setIsSearchActive(true);
-        // If Spotify returns results, use them
-        setSearchResults(tracks);
-      } else {
-        // If Spotify returns no results, use fuzzy search locally
+      .then((tracks) => {
+        if (tracks && tracks.length > 0) {
+          console.log('Tracks from Spotify:', tracks);
+          setSearchResults(tracks);
+          setIsSearchActive(true);
+        } else {
+          console.log('No tracks found, performing fuzzy search.');
+          
+          // If no Spotify results, fallback to fuzzy search
+          const options = {
+            keys: ['name', 'artist', 'album'],
+            threshold: 0.3, // Adjust sensitivity
+          };
+  
+          const fuse = new Fuse(mockTracks, options);
+          const fuzzyResults = fuse.search(term).map((result) => result.item);
+  
+          setSearchResults(fuzzyResults);
+          console.log(`Fuzzy search results for "${term}":`, fuzzyResults);
+        }
+      })
+      .catch((error) => {
+        console.error('Error with Spotify search:', error);
+  
+        // Optional fallback: Handle errors by using fuzzy search
         const options = {
           keys: ['name', 'artist', 'album'],
-          threshold: 0.3, // Adjust sensitivity
+          threshold: 0.3,
         };
-  
         const fuse = new Fuse(mockTracks, options);
-        const fuzzyResults = fuse.search(term).map(result => result.item);
-  
-        setSearchResults(fuzzyResults);
-        console.log(`Fuzzy search results for "${term}":`, fuzzyResults);
-      }
-    }).catch(error => {
-      console.error('Error with Spotify search:', error);
-    });
+        const fallbackResults = fuse.search(term).map((result) => result.item);
+        setSearchResults(fallbackResults);
+      });
   };
-  
+
+  // Trigger default search on first render
+  useEffect(() => {
+    console.log('Performing default search...');
+    searchSpotify(''); // Replace '' with a default term if necessary
+  }, []);
+
 
   const addTrack = (track) => {
     if (!playlistTracks.find(savedTrack => savedTrack.id === track.id)) {

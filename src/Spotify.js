@@ -4,8 +4,10 @@ let accessToken;
 
 const Spotify = {
     getAccessToken() {
-      if (accessToken) return accessToken; // Return the token if already set
-  
+      if (accessToken) {
+        console.log("Access token exists:", accessToken)
+        return accessToken; // Return the token if already set
+      }
       // Check if the token is in the URL
       const tokenMatch = window.location.href.match(/access_token=([^&]*)/);
       const expiresMatch = window.location.href.match(/expires_in=([^&]*)/);
@@ -13,6 +15,10 @@ const Spotify = {
       if (tokenMatch && expiresMatch) {
         accessToken = tokenMatch[1];
         const expiresIn = Number(expiresMatch[1]);
+
+         // Log token info
+    console.log("Access token from URL:", accessToken);
+    console.log("Expires in:", expiresIn);
   
         // Clear the token from the URL to avoid issues
         window.setTimeout(() => (accessToken = ''), expiresIn * 1000);
@@ -29,7 +35,15 @@ const Spotify = {
     },
     search(term) {
         const accessToken = this.getAccessToken();
-        if (!accessToken) return;
+          // If no token is available yet, wait and retry
+        if (!accessToken) {
+            console.warn('Access token not available yet. Retrying in 500ms...');
+            return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve(this.search(term)); // Retry after 500ms
+                }, 500);
+            });
+        }
     
         const url = `https://api.spotify.com/v1/search?type=track&q=${encodeURIComponent(term)}`;
     
