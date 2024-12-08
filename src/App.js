@@ -11,6 +11,7 @@ const App = () => {
   const [playlistTracks, setPlaylistTracks] = useState([]);
   const [playlistName, setPlaylistName] = useState('My Playlist');
   const [isSearchActive, setIsSearchActive] = useState(false);
+  const [isPlaylistVisible, setIsPlaylistVisible] = useState(true);
 
   const mockTracks = [
     { id: 1, name: 'Track 1', artist: 'Artist 1', album: 'Album 1', uri: 'mock:uri1' },
@@ -90,6 +91,10 @@ const App = () => {
     });
   };
 
+  const togglePlaylistVisibility = () => {
+    setIsPlaylistVisible((prevState) => !prevState);
+  };
+
   return (
     <div>
       <h1>Jammming</h1>
@@ -101,14 +106,23 @@ const App = () => {
         <SearchResults 
           searchResults={searchResults} 
           onAdd={addTrack} 
+          playlistTracks={playlistTracks}
+          isPlaylistVisible={isPlaylistVisible}
         />
-        <Playlist
+        {isPlaylistVisible && (
+        <Playlist 
           playlistName={playlistName}
           playlistTracks={playlistTracks}
           onRemove={removeTrack}
           onNameChange={updatePlaylistName}
           onSave={savePlaylist}
         />
+        )}
+        <button className={`toggle-button 
+    ${playlistTracks.length > 0 ? 'has-tracks' : 'no-tracks'} 
+    ${playlistTracks.length > 0 && isPlaylistVisible ? 'visible' : 'not-visible'}`}
+        onClick={togglePlaylistVisibility}
+          >{isPlaylistVisible ? '▼' : '▲'}</button>
       </div>
       )}
     </div>

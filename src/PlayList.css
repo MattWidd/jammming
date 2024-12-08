@@ -1,0 +1,42 @@
+.playList {
+    position: absolute;
+    bottom: 0%; /* Start hidden below the screen */
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.037);
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    transform: translateY(100%); /* Hidden position */
+    opacity: 0; /* Invisible */
+    height: 150px;
+  }
+
+  .playList.active1 {
+    transform: translateY(0); /* Bring to visible area */
+    opacity: 1; /* Fully visible */
+    column-count: 1; /* Number of columns */
+    column-gap: 20px; /* Spacing between columns */
+    overflow-y: auto;
+  }
+
+  .playList.active2 {
+    transform: translateY(0); /* Bring to visible area */
+    opacity: 1; /* Fully visible */
+    column-count: 2; /* Number of columns */
+    column-gap: 20px; /* Spacing between columns */
+    overflow-y: auto;
+  }
+
+  .playList.active3 {
+    transform: translateY(0); /* Bring to visible area */
+    opacity: 1; /* Fully visible */
+    column-count: 3; /* Number of columns */
+    column-gap: 20px; /* Spacing between columns */
+    overflow-y: auto;
+    overflow-x: auto;
+  }
+  
+  .playList.disactivated {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  

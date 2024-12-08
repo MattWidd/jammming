@@ -26,10 +26,21 @@ h1 {
 }
 
 .SearchResults {
-  column-count: 3; /* Number of columns */
+  transition: max-height 0.5s ease, transform 0.5s ease; /* Smooth transition for height and movement */
+  column-count: 3; /* Default number of columns */
   column-gap: 20px; /* Spacing between columns */
-  max-height: calc(100vh - 150px); /* Adjust based on your layout */
-  overflow-y: auto; /* Enable vertical scrolling if results exceed the page height */
+  max-height: calc(100vh - 150px); /* Default max height */
+  overflow-y: auto; /* Enable vertical scrolling for overflowing content */
+}
+
+.SearchResults.active {
+  max-height: calc(50vh); /* Reduce height when playlist is active */
+  transform: translateY(0); /* Reset any movement */
+}
+
+.SearchResults.disactivated {
+  max-height: calc(100vh - 150px); /* Full height when playlist is hidden */
+  transform: translateY(0); /* Optional: Adjust movement if needed */
 }
 
 .SearchResults-item {
@@ -40,4 +51,25 @@ h1 {
   border-radius: 5px;
   background-color: #f8f8f8;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-button {
+  transition: all 0.3s ease-in-out; /* Adjust timing and easing function as needed */
+}
+
+.toggle-button.has-tracks {
+  position: absolute;
+  bottom: 165px;
+  right:10px;
+  display: block;
+}
+
+
+.toggle-button.no-tracks {
+  display: none;
+}
+
+
+.toggle-button.has-tracks.not-visible {
+  bottom: 40px;
 }
